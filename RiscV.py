@@ -26,16 +26,18 @@ def process_assembly_line(line, output_file):
         return
 
     instruction = components[0];
-    instr_binaries = determine_instruction_binaries(instruction)  # Generar binarios de la instrucción {func3.. etc}
-    verifyComponentNumber(instr_binaries['type'], len(components)) # Verifica que el número de componentes coincide segun la instr
+    # Generate binaries from the instruction {func3.. etc}
+    instr_binaries = determine_instruction_binaries(instruction)
+    # Verify that the number of components matches according to the instruction
+    verifyComponentNumber(instr_binaries['type'], len(components))
+    # Generate complete command
+    instruction = generate_instruction(instr_binaries, components, labels, (line_n - 1) * 4) 
 
-    instruction = generate_instruction(instr_binaries, components, labels, (line_n - 1) * 4)  # Generar instrucción com|pleta
-
-    # Convertir instrucción a hexadecimal
+    # Convert instruction to hexadecimal
     decimal_i = int(instruction, 2)
     hexadecimal_i = hex(decimal_i)
 
-    # Escribir en el archivo
+    # Write to the file
     output_file.write(hexadecimal_i[2:].zfill(8) + '\n')
     line_n += 1
         
@@ -55,10 +57,10 @@ def main():
             line_n = 1
 
     except FileNotFoundError:
-        print(f"Archivo '{input_file_path}'no encontrado.")
+        print(f"File '{input_file_path}'not found.")
 
     except Exception as e:
-        print(f"Ocurrió un error: {e}")
+        print(f"An error occurred: {e}")
 
     # Proccess Assembler
     try:
@@ -68,16 +70,16 @@ def main():
                     try:
                         process_assembly_line(line, output_file)
                     except Exception as e:
-                        print(f"Error en linea {line_number}: {line.strip()}")
+                        print(f"Error in line {line_number}: {line.strip()}")
                         raise e
 
-            print(f"Los binarios de tu programa se guardaron en '{output_file_name}'.")
+            print(f"Your program binaries were saved in '{output_file_name}'.")
 
     except FileNotFoundError:
-        print(f"Archivo '{input_file_path}'no encontrado.")
+        print(f"File '{input_file_path}'not found.")
 
     except Exception as e:
-        print(f"Ocurrió un error: {e}")
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
