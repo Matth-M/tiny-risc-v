@@ -1,4 +1,5 @@
 import re
+import argparse
 from errors import verifyComponentNumber
 from i_binaries_gen import determine_instruction_binaries, generate_instruction
 
@@ -43,14 +44,19 @@ def process_assembly_line(line, output_file):
 
 def main():
     global line_n
-    input_file_path = "assembly_code.asm"
-    output_file_name = "program.mem"
+
+    parser = argparse.ArgumentParser(description="Process RISC-V assembly code.")
+    parser.add_argument("-s", "--source", type=str, default="assembly_code.asm", help="Input assembly filename")
+    parser.add_argument("-o", "--output", type=str, default="program.mem", help="Output filename")
+
+    args = parser.parse_args()
+
+    input_file_path = args.source
+    output_file_name = args.output
 
     # Process Labels
     try:
-        with open(input_file_path, "r") as input_file, open(
-            output_file_name, "w"
-        ) as output_file:
+        with open(input_file_path, "r") as input_file, open(output_file_name, "w") as output_file:
             for line_number, line in enumerate(input_file, start=1):
                 if line.strip():
                     process_labels(line)
@@ -58,16 +64,15 @@ def main():
             line_n = 1
 
     except FileNotFoundError:
-        print(f"File '{input_file_path}'not found.")
-
+        print(f"File '{input_file_path}' not found.")
+        return
     except Exception as e:
         print(f"An error occurred: {e}")
+        return
 
-    # Proccess Assembler
+    # Process Assembler
     try:
-        with open(input_file_path, "r") as input_file, open(
-            output_file_name, "w"
-        ) as output_file:
+        with open(input_file_path, "r") as input_file, open(output_file_name, "w") as output_file:
             for line_number, line in enumerate(input_file, start=1):
                 if line.strip():
                     try:
