@@ -1,13 +1,10 @@
 import re
-
 from errors import verifyComponentNumber
 from i_binaries_gen import determine_instruction_binaries, generate_instruction
 
 line_n = 1
 labels = {}
 
-
-#
 def process_labels(line):
     global line_n
     components = re.findall(r"\b\w+\b", line)
@@ -19,8 +16,6 @@ def process_labels(line):
     else:
         line_n += 1
 
-
-#
 def process_assembly_line(line, output_file):
     global line_n
     components = re.findall(r"\b\w+\b", line)
@@ -46,8 +41,6 @@ def process_assembly_line(line, output_file):
     output_file.write(hexadecimal_i[2:].zfill(8) + "\n")
     line_n += 1
 
-
-#
 def main():
     global line_n
     input_file_path = "assembly_code.asm"
@@ -86,11 +79,9 @@ def main():
             print(f"Your program binaries were saved in '{output_file_name}'.")
 
     except FileNotFoundError:
-        print(f"File '{input_file_path}'not found.")
-
+        print(f"File '{input_file_path}' not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
-
 
 if __name__ == "__main__":
     main()
